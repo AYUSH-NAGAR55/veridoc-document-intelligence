@@ -1,6 +1,0 @@
-# Install this ONLY if you set EMBEDDING_BACKEND=sentence-transformers in .env,
-# and only on a host with enough memory to spare (roughly 1GB+) - it installs
-# PyTorch, which is large and memory-hungry at model-load time.
-#
-#   pip install -r requirements.txt -r requirements-embeddings.txt
-sentence-transformers>=3.1.1
