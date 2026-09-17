@@ -1,0 +1,38 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # After first `docker compose up`, run once in another terminal:
+    #   docker compose exec ollama ollama pull llama3
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ollama
+    volumes:
+      - veridoc_storage:/app/app/storage
+      - veridoc_faiss:/app/app/faiss_index
+      - veridoc_db:/app/data
+    environment:
+      - VERIDOC_DB_PATH=/app/data/veridoc.db
+      - OLLAMA_URL=http://ollama:11434
+      - OLLAMA_MODEL=llama3
+      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  ollama_data:
+  veridoc_storage:
+  veridoc_faiss:
+  veridoc_db:
